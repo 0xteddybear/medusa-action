@@ -24,7 +24,7 @@ compatibility_link()
 
 compatibility_link
 
-CMD=(echidna-test "$INPUT_FILES")
+CMD=(medusa fuzz)
 
 for OPTION in $OPTIONS; do
     NAME=INPUT_"${OPTION^^}"
@@ -42,24 +42,18 @@ for SWITCH in $SWITCHES; do
     fi
 done
 
-echo "Echidna version: $(echidna-test --version)" >&2
-echo "Echidna command line: ${CMD[@]}" >&2
+echo "medusa version: $(medusa --version)" >&2
+echo "medusa command line: ${CMD[@]}" >&2
 echo >&2
-
-SOLC_VERSION="$(get 'INPUT_SOLC-VERSION')"
-if [[ -n "$SOLC_VERSION" ]]; then
-    solc-select install "$SOLC_VERSION"
-    solc-select use "$SOLC_VERSION"
-fi
 
 OUTPUT_FILE="$(get 'INPUT_OUTPUT-FILE')"
 if [[ -n "$OUTPUT_FILE" ]]; then
     echo "::set-output name=output-file::$OUTPUT_FILE"
-    # tee stdout to $OUTPUT_FILE to capture echidna's output
+    # tee stdout to $OUTPUT_FILE to capture medusa's output
     exec > >(tee "$OUTPUT_FILE")
 fi
 
-WORKDIR="$(get 'INPUT_ECHIDNA-WORKDIR')"
+WORKDIR="$(get 'INPUT_MEDUSA-WORKDIR')"
 if [[ -n "$WORKDIR" ]]; then
     cd "$WORKDIR"
 fi
